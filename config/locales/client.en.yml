@@ -1,0 +1,11 @@
+en:
+  js:
+    deeplink:
+      title: "Open in Mobile App"
+      button_label_view_message: "View Message"
+      button_label_view_post: "View Post"
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          lexicon: "Lexicon"

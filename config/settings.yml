@@ -1,0 +1,11 @@
+lexicon:
+  lexicon_push_notifications_enabled:
+    default: false
+  lexicon_email_deep_linking_enabled:
+    default: false
+    validator: "LexiconEnableDeepLinkingValidator"
+  lexicon_app_scheme:
+    client: true
+    default: ""
+    type: text
+    validator: "LexiconAppSchemeValidator"

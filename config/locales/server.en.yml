@@ -1,0 +1,10 @@
+en:
+  site_settings:
+    lexicon_push_notifications_enabled: "enable Push Notifications (via Expo) for the Lexicon mobile app"
+    lexicon_email_deep_linking_enabled: "rewrite some email links to open in your published app by default on mobile devices (lexicon app scheme is required)"
+    lexicon_app_scheme: "Lexicon app scheme (required for email deep linking)"
+    errors:
+      missing_app_scheme: "Missing app scheme"
+      wrong_format_app_scheme: "Wrong format (example: my-app)"
+      min_app_scheme_length: "Must be at least 3 characters"
+      max_app_scheme_length: "Must be at most 2,000 characters"
