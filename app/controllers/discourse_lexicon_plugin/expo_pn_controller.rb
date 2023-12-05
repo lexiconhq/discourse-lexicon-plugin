@@ -17,7 +17,6 @@ module DiscourseLexiconPlugin
 
       ExpoPnSubscription
         .where(expo_pn_token: expo_pn_token)
-        .where.not(user_id: current_user.id)
         .destroy_all
 
       record =
