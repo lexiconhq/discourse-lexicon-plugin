@@ -8,14 +8,14 @@
 
 # We need to load all external packages first
 # Reference: https://meta.discourse.org/t/plugin-using-own-gem/50007/4
-gem 'rake', '13.0.6'
+gem 'rake', '13.1.0'
 gem 'connection_pool', '2.4.1'
-gem 'unf_ext', '0.0.8.2'
+gem 'unf_ext', '0.0.9.1'
 gem 'unf', '0.1.4'
 gem 'domain_name', '0.5.20190701'
 gem 'http-cookie', '1.0.5'
 gem 'ffi', '1.16.3'
-gem 'public_suffix', '5.0.3'
+gem 'public_suffix', '5.0.4'
 gem 'addressable', '2.8.5'
 gem 'ffi-compiler', '1.0.1', require_name: 'ffi-compiler/loader'
 gem 'llhttp-ffi', '0.4.0', require_name: 'llhttp'
