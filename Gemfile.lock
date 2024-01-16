@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.1)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     connection_pool (2.4.1)
     domain_name (0.5.20190701)
@@ -44,7 +44,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  addressable (= 2.8.1)
+  addressable (= 2.8.6)
   connection_pool (= 2.4.1)
   domain_name (= 0.5.20190701)
   expo-server-sdk (= 0.1.4)

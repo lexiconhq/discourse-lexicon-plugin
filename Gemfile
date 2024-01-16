@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 # This lines below serve as a reference and need to be used on plugin.rb
 # https://meta.discourse.org/t/plugin-using-own-gem/50007/4
-gem 'addressable', '2.8.1'
+gem 'addressable', '2.8.6'
 gem 'connection_pool', '2.4.1'
 gem 'domain_name', '0.5.20190701'
 gem 'expo-server-sdk', '0.1.4'
