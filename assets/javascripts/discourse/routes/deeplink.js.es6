@@ -1,9 +1,12 @@
 import { action } from "@ember/object";
+import { service } from "@ember/service";
 import DiscourseURL from "discourse/lib/url";
 import DiscourseRoute from "discourse/routes/discourse";
 
 export default class DeeplinkRoute extends DiscourseRoute {
   is_pm = false;
+
+  @service router;
 
   beforeModel(params) {
     this.is_pm = (params.to.queryParams.is_pm ?? "false") === "true";
@@ -35,6 +38,6 @@ export default class DeeplinkRoute extends DiscourseRoute {
         `${this.siteSettings.lexicon_app_scheme}://${scene}/${link}`
       );
     }
-    this.transitionTo(`/${link}`);
+    this.router.transitionTo(`/${link}`);
   }
 }
