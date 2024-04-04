@@ -8,7 +8,7 @@
 
 # We need to load all external packages first
 # Reference: https://meta.discourse.org/t/plugin-using-own-gem/50007/4
-gem 'rake', '13.1.0'
+gem 'rake', '13.2.0'
 gem 'connection_pool', '2.4.1'
 gem 'unf_ext', '0.0.9.1'
 gem 'unf', '0.1.4'
