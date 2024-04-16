@@ -11,7 +11,7 @@ gem 'http-cookie', '1.0.5'
 gem 'http-form_data', '2.3.0'
 gem 'llhttp-ffi', '0.4.0'
 gem 'public_suffix', '5.0.5'
-gem 'rake', '13.2.0'
+gem 'rake', '13.2.1'
 gem 'unf', '0.1.4'
 gem 'unf_ext', '0.0.9.1'
 
