@@ -21,8 +21,8 @@ module DiscourseLexiconPlugin
       password = params.require(:password)
       user = current_user
       return render json: { error: 'user not found' } unless user.present?
-      return render json: { error: 'an admin cannot delete its own account.' } if user.admin?
-      return render json: { error: 'wrong password' } unless user.confirm_password?(password)
+      return render json: { error: "admin can't be deleted" } if user.admin?
+      return render json: { error: 'incorrect password' } unless user.confirm_password?(password)
 
       delete_posts(user)
 
