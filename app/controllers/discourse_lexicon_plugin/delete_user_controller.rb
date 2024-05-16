@@ -13,7 +13,7 @@ module DiscourseLexiconPlugin
 
       delete_posts(user)
 
-      delete_lexicon_plugin_data(user)
+      PushNotificationCleanup.new(user).delete_lexicon_plugin_data
 
       delete_account(user)
 
@@ -33,39 +33,6 @@ module DiscourseLexiconPlugin
 
     def delete_account(user)
       DiscourseLexiconPlugin::UserDestroyer.new(user).destroy(user)
-    end
-
-    def delete_lexicon_plugin_data(user)
-      push_notifications_ids = get_push_notifications_ids_by_user(user)
-
-      delete_push_notifications_receipt(push_notifications_ids)
-      delete_push_notifications_retry(push_notifications_ids)
-      delete_push_notifications(push_notifications_ids)
-    end
-
-    # Delete all data push notifications of deleted user
-    def delete_push_notifications(ids)
-      PushNotification
-        .where(id: ids)
-        .delete_all
-    end
-
-    def delete_push_notifications_retry(ids)
-      PushNotificationRetry
-        .where(push_notification_id: ids)
-        .delete_all
-    end
-
-    def delete_push_notifications_receipt(ids)
-      PushNotificationReceipt
-        .where(push_notification_id: ids)
-        .delete_all
-    end
-
-    def get_push_notifications_ids_by_user(user)
-      PushNotification
-        .where(user_id: user.id)
-        .pluck(:id)
     end
   end
 end
