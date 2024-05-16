@@ -8,8 +8,8 @@
 # Responsible for destroying a User record
 module DiscourseLexiconPlugin
   class UserDestroyer
-    # class PostsExistError < RuntimeError
-    # end
+    class PostsExistError < RuntimeError
+    end
 
     def initialize(actor)
       @actor = actor
