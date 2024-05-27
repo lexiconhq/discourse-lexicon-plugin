@@ -28,6 +28,8 @@ enabled_site_setting :lexicon_email_deep_linking_enabled
 enabled_site_setting :lexicon_app_scheme
 
 load File.expand_path('lib/discourse-lexicon-plugin/engine.rb', __dir__)
+load File.expand_path('lib/discourse-lexicon-plugin/post_destroyer.rb', __dir__)
+load File.expand_path('lib/discourse-lexicon-plugin/user_destroyer.rb', __dir__)
 
 # Site setting validators must be loaded before initialize
 require_relative 'lib/validators/lexicon_enable_deep_linking_validator'
