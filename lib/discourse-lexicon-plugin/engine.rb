@@ -2,7 +2,7 @@
 
 module DiscourseLexiconPlugin
   class Engine < ::Rails::Engine
-    engine_name 'DiscourseLexiconPlugin'
+    engine_name 'DiscourseLexiconPlugin'.freeze
     isolate_namespace DiscourseLexiconPlugin
 
     config.after_initialize do
