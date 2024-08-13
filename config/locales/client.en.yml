@@ -4,6 +4,7 @@ en:
       title: "Open in Mobile App"
       button_label_view_message: "View Message"
       button_label_view_post: "View Post"
+      button_label_open_app: "Open App"
   admin_js:
     admin:
       site_settings:

@@ -2,7 +2,7 @@
 
 module DiscourseLexiconPlugin
   class ExpoPnController < ::ApplicationController
-    requires_plugin DiscourseLexiconPlugin
+    requires_plugin DiscourseLexiconPlugin::PLUGIN_NAME
 
     def subscribe
       expo_pn_token = params.require(:push_notifications_token)

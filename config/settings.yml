@@ -9,3 +9,18 @@ lexicon:
     default: ""
     type: text
     validator: "LexiconAppSchemeValidator"
+  lexicon_apple_login_enabled:
+    default: false
+    validator: "LexiconEnableAppleLoginValidator"
+  lexicon_apple_client_id:
+    default: ""
+    type: text
+    validator: "LexiconAppleClientIdValidator"
+  lexicon_activate_account_link_enabled:
+    client: true
+    default: false
+    validator: "LexiconEnableDeepLinkingValidator"
+  lexicon_login_link_enabled:
+    client: true
+    default: false
+    validator: "LexiconEnableDeepLinkingValidator"

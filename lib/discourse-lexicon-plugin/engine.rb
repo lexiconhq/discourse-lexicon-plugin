@@ -2,12 +2,12 @@
 
 module DiscourseLexiconPlugin
   class Engine < ::Rails::Engine
-    engine_name "DiscourseLexiconPlugin".freeze
+    engine_name PLUGIN_NAME.freeze
     isolate_namespace DiscourseLexiconPlugin
-    
+
     config.after_initialize do
       Discourse::Application.routes.append do
-        mount ::DiscourseLexiconPlugin::Engine, at: "/lexicon/push_notifications"
+        mount ::DiscourseLexiconPlugin::Engine, at: '/lexicon'
       end
     end
   end

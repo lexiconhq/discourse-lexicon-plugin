@@ -11,7 +11,7 @@ const postId = 1;
 const slug = "hello";
 const appScheme = "lexicon";
 
-const deepLinkUrl = `/deeplink/t/${slug}/${topicId}/${postId}`;
+const deepLinkUrl = `/lexicon/deeplink/t/${slug}/${topicId}/${postId}`;
 
 let json = `{
   "posts": [
@@ -67,10 +67,7 @@ acceptance("Email Deep Linking Plugin", function (needs) {
   const useAndroidFlow = (queryParams = {}) => {
     sinon.stub(window.navigator, "userAgent").get(() => "Android");
     const { isPm = false } = queryParams;
-    let url = deepLinkUrl;
-    if (isPm) {
-      url = `${url}?is_pm=true`;
-    }
+    let url = `${deepLinkUrl}?is_pm=${isPm}`;
 
     return visit(url);
   };

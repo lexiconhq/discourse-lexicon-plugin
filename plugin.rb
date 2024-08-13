@@ -27,11 +27,18 @@ enabled_site_setting :lexicon_push_notifications_enabled
 enabled_site_setting :lexicon_email_deep_linking_enabled
 enabled_site_setting :lexicon_app_scheme
 
+module ::DiscourseLexiconPlugin
+  PLUGIN_NAME = 'discourse-lexicon-plugin'
+end
+
 load File.expand_path('lib/discourse-lexicon-plugin/engine.rb', __dir__)
+load File.expand_path('lib/discourse-lexicon-plugin/apple.rb', __dir__)
 
 # Site setting validators must be loaded before initialize
 require_relative 'lib/validators/lexicon_enable_deep_linking_validator'
 require_relative 'lib/validators/lexicon_app_scheme_validators'
+require_relative 'lib/validators/lexicon_enable_apple_login_validators'
+require_relative 'lib/validators/lexicon_apple_client_id_validators'
 
 after_initialize do
   load File.expand_path('app/controllers/deeplink_controller.rb', __dir__)
@@ -46,7 +53,7 @@ after_initialize do
 
     User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
 
-    DiscourseEvent.on(:before_create_notification) do |user, type, post|
+    DiscourseEvent.on(:before_create_notification) do |user, type, post, opts|
       if user.expo_pn_subscriptions.exists?
         payload = {
           notification_type: type,
@@ -61,13 +68,13 @@ after_initialize do
               strip_links: true,
               remap_emoji: true
             ),
-          username: nil || post.username,
+          username: type == Notification.types[:liked] ? nil || opts[:display_username] : nil || post.username,
           post_url: post.url,
           is_pm: post.topic.private_message?
         }
         Jobs.enqueue(
           :expo_push_notification,
-          payload: payload,
+          payload:,
           user_id: user.id
         )
       end
@@ -75,7 +82,9 @@ after_initialize do
   end
 
   Discourse::Application.routes.append do
+    get '/lexicon/deeplink/*link' => 'deeplink#index'
     get '/deeplink/*link' => 'deeplink#index'
   end
+
   UserNotifications.class_eval { prepend DeeplinkNotification }
 end
