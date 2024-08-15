@@ -8,19 +8,15 @@
 
 # We need to load all external packages first
 # Reference: https://meta.discourse.org/t/plugin-using-own-gem/50007/4
-gem 'rake', '13.2.1'
-gem 'connection_pool', '2.4.1'
-gem 'unf_ext', '0.0.9.1'
-gem 'unf', '0.1.4'
+# After testing, we determined that we do not need to load all the dependent packages already installed in the Discourse core. However, `ffi` is required because we encountered the error: `Error installing llhttp-ffi Gem::MissingSpecError: Could not find 'ffi' (>= 1.15.5)`.
+
 gem 'domain_name', '0.5.20190701'
 gem 'http-cookie', '1.0.5'
 gem 'ffi', '1.17.0'
-gem 'public_suffix', '6.0.1'
-gem 'addressable', '2.8.7'
-gem 'ffi-compiler', '1.0.1', require_name: 'ffi-compiler/loader'
+gem 'ffi-compiler', '1.3.2', require_name: 'ffi-compiler/loader'
 gem 'llhttp-ffi', '0.4.0', require_name: 'llhttp'
 gem 'http-form_data', '2.3.0', require_name: 'http/form_data'
-gem 'http', '5.1.0'
+gem 'http', '5.1.1'
 require_relative 'lib/expo_server_sdk_ruby/expo/server/sdk'
 
 enabled_site_setting :lexicon_push_notifications_enabled
