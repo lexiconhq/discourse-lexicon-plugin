@@ -22,7 +22,7 @@ class LexiconAppSchemeValidator
         @error_type = 'max_length' if value.length > MAX_APP_SCHEME_LENGTH
         false
       end
-    elsif SiteSetting.lexicon_email_deep_linking_enabled.present? || SiteSetting.lexicon_login_link_enabled.present?
+    elsif SiteSetting.lexicon_email_deep_linking_enabled.present?
       @error_type = 'missing_app_scheme'
       false
     else

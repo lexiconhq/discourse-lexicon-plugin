@@ -27,13 +27,13 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           repository: discourse/discourse
           fetch-depth: 1
 
       - name: Install plugin
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: plugins/${{ github.event.repository.name }}
           fetch-depth: 1
@@ -49,7 +49,7 @@ jobs:
           sudo -u postgres psql -c "CREATE ROLE $PGUSER LOGIN SUPERUSER PASSWORD '$PGPASSWORD';"
 
       - name: Bundler cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
@@ -65,24 +65,22 @@ jobs:
           bundle install --jobs 4
           bundle clean
 
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Yarn cache
-        uses: actions/cache@v3
-        id: yarn-cache
+      - name: Restore pnpm cache
+        uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            node_modules
+            .pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-store-
 
-      - name: Yarn install
-        run: yarn install
+      # Install dependencies with pnpm and frozen lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Fetch app state cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: app-cache
         with:
           path: tmp/app-cache
@@ -118,7 +116,7 @@ jobs:
         shell: bash
         run: |
           if [ 0 -lt $(find plugins/${{ github.event.repository.name }}/spec -type f -name "*.rb" 2> /dev/null | wc -l) ]; then
-            echo "::set-output name=files_exist::true"
+            echo "files_exist=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Plugin RSpec
@@ -127,7 +125,7 @@ jobs:
 
       - name: Check Chrome installation cache
         id: chrome-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             /usr/bin/google-chrome-stable
@@ -149,7 +147,7 @@ jobs:
         shell: bash
         run: |
           if [ 0 -lt $(find plugins/${{ github.event.repository.name }}/test/javascripts -type f \( -name "*.js" -or -name "*.es6" \) 2> /dev/null | wc -l) ]; then
-            echo "::set-output name=files_exist::true"
+            echo "files_exist=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Plugin QUnit

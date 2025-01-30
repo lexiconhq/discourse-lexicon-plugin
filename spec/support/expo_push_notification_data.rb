@@ -13,6 +13,7 @@ class ExpoPushNotificationData
 
   def default_payload
     {
+      id: 1,
       username: 'JohnDoe',
       topic_title: 'Test topic',
       excerpt: 'Test excerpt',

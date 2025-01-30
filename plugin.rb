@@ -2,7 +2,7 @@
 
 # name: discourse-lexicon-plugin
 # about: Official Discourse plugin for Lexicon (https://lexicon.is)
-# version: 2.0
+# version: 3.0
 # authors: kodefox
 # url: https://github.com/kodefox/discourse-lexicon-plugin
 
@@ -28,13 +28,10 @@ module ::DiscourseLexiconPlugin
 end
 
 load File.expand_path('lib/discourse-lexicon-plugin/engine.rb', __dir__)
-load File.expand_path('lib/discourse-lexicon-plugin/apple.rb', __dir__)
 
 # Site setting validators must be loaded before initialize
 require_relative 'lib/validators/lexicon_enable_deep_linking_validator'
 require_relative 'lib/validators/lexicon_app_scheme_validators'
-require_relative 'lib/validators/lexicon_enable_apple_login_validators'
-require_relative 'lib/validators/lexicon_apple_client_id_validators'
 
 after_initialize do
   load File.expand_path('app/controllers/deeplink_controller.rb', __dir__)

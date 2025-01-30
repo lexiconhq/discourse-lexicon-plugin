@@ -35,28 +35,11 @@ export default class DeeplinkRoute extends DiscourseRoute {
       // Additionally, Discourse won't actually call it in tests since, according
       // to them, that kills the test runner.
       // Internally, this uses `window.location = url` rather than `window.location.replace`.
-      if (
-        this.siteSettings.lexicon_activate_account_link_enabled &&
-        link.startsWith("u/activate-account/")
-      ) {
-        const [, , emailToken] = link.split("/");
-        DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://activate-account/${emailToken}`
-        );
-      } else if (
-        this.siteSettings.lexicon_login_link_enabled &&
-        link.startsWith("session/email-login/")
-      ) {
-        const [, , emailToken] = link.split("/");
-        DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://email-login/${emailToken}`
-        );
-      } else {
-        const scene = this.is_pm ? "message-detail" : "post-detail";
-        DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://${scene}/${link}`
-        );
-      }
+
+      const scene = this.is_pm ? "message-detail" : "post-detail";
+      DiscourseURL.redirectTo(
+        `${this.siteSettings.lexicon_app_scheme}://${scene}/${link}`
+      );
     }
     this.router.transitionTo(`/${link}`);
   }
