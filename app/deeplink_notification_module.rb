@@ -10,14 +10,6 @@ module DeeplinkNotification
       opts[:url] = url.prepend('/lexicon/deeplink').concat("?is_pm=#{is_pm}")
     end
 
-    if SiteSetting.lexicon_activate_account_link_enabled && opts.key?(:template) && opts[:template].respond_to?(:include?) && (opts[:template] == 'user_notifications.signup')
-      opts[:base_url] = Discourse.base_url + '/lexicon/deeplink'
-    end
-
-    if SiteSetting.lexicon_login_link_enabled && opts.key?(:template) && opts[:template].respond_to?(:include?) && (opts[:template] == 'user_notifications.email_login')
-      opts[:base_url] = Discourse.base_url + '/lexicon/deeplink'
-    end
-
     super(*builder_args)
   end
 end

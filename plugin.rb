@@ -2,7 +2,7 @@
 
 # name: discourse-lexicon-plugin
 # about: Official Discourse plugin for Lexicon (https://lexicon.is)
-# version: 2.0
+# version: 3.0
 # authors: kodefox
 # url: https://github.com/kodefox/discourse-lexicon-plugin
 
@@ -12,7 +12,7 @@
 
 gem 'domain_name', '0.5.20190701'
 gem 'http-cookie', '1.0.5'
-gem 'ffi', '1.17.0'
+gem 'ffi', '1.17.1'
 gem 'ffi-compiler', '1.3.2', require_name: 'ffi-compiler/loader'
 gem 'llhttp-ffi', '0.4.0', require_name: 'llhttp'
 gem 'http-form_data', '2.3.0', require_name: 'http/form_data'
@@ -28,13 +28,10 @@ module ::DiscourseLexiconPlugin
 end
 
 load File.expand_path('lib/discourse-lexicon-plugin/engine.rb', __dir__)
-load File.expand_path('lib/discourse-lexicon-plugin/apple.rb', __dir__)
 
 # Site setting validators must be loaded before initialize
 require_relative 'lib/validators/lexicon_enable_deep_linking_validator'
 require_relative 'lib/validators/lexicon_app_scheme_validators'
-require_relative 'lib/validators/lexicon_enable_apple_login_validators'
-require_relative 'lib/validators/lexicon_apple_client_id_validators'
 
 after_initialize do
   load File.expand_path('app/controllers/deeplink_controller.rb', __dir__)
