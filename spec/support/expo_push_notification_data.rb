@@ -30,7 +30,7 @@ class ExpoPushNotificationData
   def default_subscription
     {
       user_id: -1,
-      push_notifications_token: token,
+      expo_pn_token: token,
       experience_id: 'test-experience-id',
       application_name: 'test',
       platform: 'ios'

@@ -12,7 +12,7 @@
 
 gem 'domain_name', '0.5.20190701'
 gem 'http-cookie', '1.0.5'
-gem 'ffi', '1.17.1'
+gem 'ffi', '1.17.2'
 gem 'ffi-compiler', '1.3.2', require_name: 'ffi-compiler/loader'
 gem 'llhttp-ffi', '0.4.0', require_name: 'llhttp'
 gem 'http-form_data', '2.3.0', require_name: 'http/form_data'
@@ -43,6 +43,7 @@ after_initialize do
     load File.expand_path('app/jobs/regular/check_pn_receipt.rb', __dir__)
     load File.expand_path('app/jobs/scheduled/clean_up_push_notification_retries.rb', __dir__)
     load File.expand_path('app/jobs/scheduled/clean_up_push_notification_receipts.rb', __dir__)
+    load File.expand_path('app/events/discourse_lexicon_plugin/chat_mention_notification.rb', __dir__)
 
     User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
 
@@ -72,6 +73,12 @@ after_initialize do
         )
       end
     end
+
+    # Handle notification chat mention event after create notification summary
+    DiscourseEvent.on(:notification_created) do |notification|
+      DiscourseLexiconPlugin::ChatMentionNotification.handle(notification)
+    end
+
   end
 
   Discourse::Application.routes.append do

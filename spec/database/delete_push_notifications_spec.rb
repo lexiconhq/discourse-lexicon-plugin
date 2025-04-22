@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe "Database operations", type: :model do
-  describe "Delete Session and Token" do
-    it "deletes a session and its connected token" do
+RSpec.describe 'Database operations', type: :model do
+  describe 'Delete Session and Token' do
+    it 'deletes a session and its connected token' do
       session = UserAuthToken.create(
         user_id: '-1',
         user_agent: nil,
@@ -21,9 +21,9 @@ RSpec.describe "Database operations", type: :model do
         platform: 'ios',
         user_auth_token_id: session.id
       )
-      expect {
+      expect do
         session.destroy
-      }.to change { ExpoPnSubscription.count }.by(-1).and change { UserAuthToken.count }.by(-1)
+      end.to change { ExpoPnSubscription.count }.by(-1).and change { UserAuthToken.count }.by(-1)
     end
   end
 end

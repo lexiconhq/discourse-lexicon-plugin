@@ -8,8 +8,12 @@ class PushNotificationManager
     notification_type = push_notification.notification_type
     post_url = push_notification.post_url
     is_pm = push_notification.is_pm
+    is_chat = push_notification.is_chat
+    is_thread = push_notification.is_thread
+    channel_name = push_notification.channel_name
 
-    content = NotificationContent.generate_notification_content(notification_type, sender, topic_title, excerpt)
+    content = NotificationContent.generate_notification_content(notification_type, sender, topic_title, excerpt,
+                                                                channel_name)
     title = content[:title]
     body = content[:body]
 
@@ -37,7 +41,9 @@ class PushNotificationManager
                       {
                         'discourse_url' => post_url,
                         'type' => notification_type,
-                        'is_pm' => is_pm
+                        'is_pm' => is_pm,
+                        'is_chat' => is_chat,
+                        'is_thread' => is_thread
                       }
                     )
       end

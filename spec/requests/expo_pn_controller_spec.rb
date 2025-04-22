@@ -3,16 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe 'Expo Push Notifications', type: :request do
-  fab!(:user) { Fabricate(:user) }
-  push_notifications_token = 'random_token'
-  application_name = 'test-app'
-  platform = 'android'
-  experience_id = '@test/test-app'
+  let!(:user) { Fabricate(:user) }
+  let(:push_notifications_token) { 'random_token' }
+  let(:application_name) { 'test-app' }
+  let(:platform) { 'android' }
+  let(:experience_id) { '@test/test-app' }
+  let(:valid_params) do
+    {
+      push_notifications_token: push_notifications_token,
+      application_name: application_name,
+      platform: platform,
+      experience_id: experience_id
+    }
+  end
 
   describe 'Post push_notifications/subscribe' do
-    params = { push_notifications_token: push_notifications_token, application_name: application_name,
-               platform: platform, experience_id: experience_id }
-
     before do
       sign_in(user)
     end
@@ -25,9 +30,8 @@ RSpec.describe 'Expo Push Notifications', type: :request do
     end
 
     it 'should return invalid platform' do
-      params[:platform] = 'invalid platform'
-
-      post '/lexicon/push_notifications/subscribe.json', params: params
+      # handle to not mutate variable params using merge
+      post '/lexicon/push_notifications/subscribe.json', params: valid_params.merge(platform: 'invalid platform')
 
       json_response = JSON.parse(response.body)
       expect(response.status).to eq(400)
@@ -35,11 +39,11 @@ RSpec.describe 'Expo Push Notifications', type: :request do
     end
 
     it 'should success add token and return {expo_pn_token, user_id}' do
-      post '/lexicon/push_notifications/subscribe.json', params: params
+      post '/lexicon/push_notifications/subscribe.json', params: valid_params
 
       json_response = JSON.parse(response.body)
       expect(response.status).to eq(200)
-      expect(json_response['expo_pn_token']).to eq(params[:push_notifications_token])
+      expect(json_response['expo_pn_token']).to eq(push_notifications_token)
       expect(json_response['user_id']).to eq(user[:id])
     end
   end
