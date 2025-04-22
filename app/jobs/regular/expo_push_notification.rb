@@ -15,7 +15,10 @@ module Jobs
           excerpt: payload[:excerpt],
           notification_type: payload[:notification_type],
           post_url: payload[:post_url],
-          is_pm: payload[:is_pm]
+          is_pm: payload[:is_pm],
+          is_chat: payload[:is_chat],
+          is_thread: payload[:is_thread],
+          channel_name: payload[:channel_name]
         )
         PushNotificationManager.send_notification(push_notification: push_notification,
                                                   expo_pn_subscriptions: expo_pn_subscriptions)
