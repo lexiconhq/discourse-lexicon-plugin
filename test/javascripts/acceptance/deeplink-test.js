@@ -1,8 +1,8 @@
-import sinon from "sinon";
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
-import { test } from "qunit";
 import { currentURL, visit } from "@ember/test-helpers";
+import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import I18n from "I18n";
+import { test } from "qunit";
+import sinon from "sinon";
 
 import DiscourseURL from "discourse/lib/url";
 
@@ -55,7 +55,7 @@ acceptance("Email Deep Linking Plugin", function (needs) {
       .callsFake((url) =>
         assert.equal(
           url,
-          `${appScheme}://post-detail/t/${slug}/${topicId}/${postId}`
+          `${appScheme}://localhost/post-detail/t/${slug}/${topicId}/${postId}`
         )
       );
 

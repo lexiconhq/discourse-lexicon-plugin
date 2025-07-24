@@ -33,17 +33,25 @@ load File.expand_path('lib/discourse-lexicon-plugin/engine.rb', __dir__)
 require_relative 'lib/validators/lexicon_enable_deep_linking_validator'
 require_relative 'lib/validators/lexicon_app_scheme_validators'
 
+
 after_initialize do
   load File.expand_path('app/controllers/deeplink_controller.rb', __dir__)
   load File.expand_path('app/deeplink_notification_module.rb', __dir__)
   load File.expand_path('app/serializers/site_serializer.rb', __dir__)
+  load File.expand_path('app/extend_invite.rb', __dir__)       
 
   if SiteSetting.lexicon_push_notifications_enabled
     load File.expand_path('app/jobs/regular/expo_push_notification.rb', __dir__)
     load File.expand_path('app/jobs/regular/check_pn_receipt.rb', __dir__)
     load File.expand_path('app/jobs/scheduled/clean_up_push_notification_retries.rb', __dir__)
     load File.expand_path('app/jobs/scheduled/clean_up_push_notification_receipts.rb', __dir__)
-    load File.expand_path('app/events/discourse_lexicon_plugin/chat_mention_notification.rb', __dir__)
+    # disable chat mention
+    # load File.expand_path('app/events/chat_mention_notification.rb', __dir__)
+    load File.expand_path('app/events/discourse_lexicon_plugin/chat_notification.rb', __dir__)
+    
+    # Disable chat email notification if using mobile push notification
+    load File.expand_path('app/jobs/scheduled/chat/email_notifications.rb', __dir__)
+
 
     User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
 
@@ -74,11 +82,11 @@ after_initialize do
       end
     end
 
-    # Handle notification chat mention event after create notification summary
-    DiscourseEvent.on(:notification_created) do |notification|
-      DiscourseLexiconPlugin::ChatMentionNotification.handle(notification)
-    end
 
+    # handle push notification every time send chat message
+    DiscourseEvent.on(:chat_message_created) do |notification|
+      DiscourseLexiconPlugin::ChatNotification.handle(notification)
+    end
   end
 
   Discourse::Application.routes.append do

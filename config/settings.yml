@@ -9,3 +9,11 @@ lexicon:
     default: ""
     type: text
     validator: "LexiconAppSchemeValidator"
+  lexicon_activate_account_link_enabled:
+    client: true
+    default: false
+    validator: "LexiconEnableDeepLinkingValidator"
+  lexicon_invites_link_enabled:
+    client: true
+    default: false
+    validator: "LexiconEnableDeepLinkingValidator"

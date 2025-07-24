@@ -43,7 +43,8 @@ class PushNotificationManager
                         'type' => notification_type,
                         'is_pm' => is_pm,
                         'is_chat' => is_chat,
-                        'is_thread' => is_thread
+                        'is_thread' => is_thread,
+                        'host' => Discourse.current_hostname
                       }
                     )
       end

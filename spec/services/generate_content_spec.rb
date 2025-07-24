@@ -10,7 +10,6 @@ describe 'notification_content' do
   let(:channel_name) { 'General Chat' }
 
   let(:notification_type_message) { Notification.types[:private_message] }
-  let(:notification_type_chat_mention) { Notification.types[:chat_mention] }
 
   it 'should generate content and title' do
     expected_title_mention = 'Adam mentioned you - Test Topic'
@@ -65,13 +64,20 @@ describe 'notification_content' do
     expect(result_linked[:body]).to eq(expected_linked)
   end
 
-  it 'should handle notification type "chat_mention" correctly' do
-    expected_title_chat_mention = 'Adam mentioned you at - General Chat'
-    expected_body_chat_mention = 'This is the notification for test'
+  it 'should handle notification type "chat_message" correctly with channel_name' do
+    notification_type_chat_message = Notification.types[:chat_message]
+    expected_title = 'Adam send a messages - General Chat'
+    expected_body = 'This is the notification for test'
 
-    result_chat_mention = NotificationContent.generate_notification_content(notification_type_chat_mention, sender,
-                                                                            nil, excerpt, channel_name)
-    expect(result_chat_mention[:title]).to eq(expected_title_chat_mention)
-    expect(result_chat_mention[:body]).to eq(expected_body_chat_mention)
+    result = NotificationContent.generate_notification_content(
+      notification_type_chat_message,
+      sender,
+      nil,
+      excerpt,
+      channel_name
+    )
+
+    expect(result[:title]).to eq(expected_title)
+    expect(result[:body]).to eq(expected_body)
   end
 end

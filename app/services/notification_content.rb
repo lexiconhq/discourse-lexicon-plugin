@@ -29,8 +29,8 @@ class NotificationContent
         text: 'quoted your post',
         body: :excerpt
       },
-      Notification.types[:chat_mention] => {
-        text: 'mentioned you at',
+      Notification.types[:chat_message] => {
+        text: 'send a messages',
         body: :excerpt
       }
     }
@@ -40,7 +40,11 @@ class NotificationContent
     # Use topic_title if available; otherwise, fall back to channel_name
     title_topic = topic_title.presence || channel_name.presence
 
-    title = variation[:body] == :excerpt ? "#{sender} #{variation[:text]} - #{title_topic}" : variation[:text]
+    title = if variation[:body] == :excerpt
+              "#{sender} #{variation[:text]}#{title_topic.present? ? " - #{title_topic}" : ''}"
+            else
+              variation[:text]
+            end
     body = variation[:body] == :excerpt ? excerpt : "#{sender}: #{excerpt}"
 
     { title: title, body: body }
