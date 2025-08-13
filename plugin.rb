@@ -55,7 +55,10 @@ after_initialize do
 
     User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
 
+    Rails.logger.warn "[Lexicon] Start push notifications"
+
     DiscourseEvent.on(:before_create_notification) do |user, type, post, opts|
+      Rails.logger.warn "[Lexicon] run post push notification"
       if user.expo_pn_subscriptions.exists?
         payload = {
           notification_type: type,
@@ -85,6 +88,8 @@ after_initialize do
 
     # handle push notification every time send chat message
     DiscourseEvent.on(:chat_message_created) do |notification|
+      Rails.logger.warn "[Lexicon] run chat push notification"
+
       DiscourseLexiconPlugin::ChatNotification.handle(notification)
     end
   end
