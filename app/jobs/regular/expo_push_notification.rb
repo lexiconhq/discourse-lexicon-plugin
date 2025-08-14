@@ -5,7 +5,8 @@ module Jobs
     # We have a custom retry implementation, so this prevents Sidekiq from automatically retrying the jobs alongside our manual retry.
     sidekiq_options retry: false
     def execute(args)
-      Rails.logger.warn '[Lexicon] execute job expo push notification'
+      return unless SiteSetting.lexicon_push_notifications_enabled
+
       if args[:retry_ids].blank?
         payload = args[:payload]
         expo_pn_subscriptions = ExpoPnSubscription.where(user_id: args[:user_id])

@@ -40,58 +40,55 @@ after_initialize do
   load File.expand_path('app/serializers/site_serializer.rb', __dir__)
   load File.expand_path('app/extend_invite.rb', __dir__)       
 
-  if SiteSetting.lexicon_push_notifications_enabled
-    load File.expand_path('app/jobs/regular/expo_push_notification.rb', __dir__)
-    load File.expand_path('app/jobs/regular/check_pn_receipt.rb', __dir__)
-    load File.expand_path('app/jobs/scheduled/clean_up_push_notification_retries.rb', __dir__)
-    load File.expand_path('app/jobs/scheduled/clean_up_push_notification_receipts.rb', __dir__)
-    # disable chat mention
-    # load File.expand_path('app/events/chat_mention_notification.rb', __dir__)
-    load File.expand_path('app/events/discourse_lexicon_plugin/chat_notification.rb', __dir__)
-    
-    # Disable chat email notification if using mobile push notification
-    load File.expand_path('app/jobs/scheduled/chat/email_notifications.rb', __dir__)
+  # Push Notification Handler
+  load File.expand_path('app/jobs/regular/expo_push_notification.rb', __dir__)
+  load File.expand_path('app/jobs/regular/check_pn_receipt.rb', __dir__)
+  load File.expand_path('app/jobs/scheduled/clean_up_push_notification_retries.rb', __dir__)
+  load File.expand_path('app/jobs/scheduled/clean_up_push_notification_receipts.rb', __dir__)
+  # disable chat mention
+  # load File.expand_path('app/events/chat_mention_notification.rb', __dir__)
+  load File.expand_path('app/events/discourse_lexicon_plugin/chat_notification.rb', __dir__)
+  
+  # Disable chat email notification if using mobile push notification
+  load File.expand_path('app/jobs/scheduled/chat/email_notifications.rb', __dir__)
 
 
-    User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
+  User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
 
-    Rails.logger.warn "[Lexicon] Start push notifications"
 
-    DiscourseEvent.on(:before_create_notification) do |user, type, post, opts|
-      Rails.logger.warn "[Lexicon] run post push notification"
-      if user.expo_pn_subscriptions.exists?
-        payload = {
-          notification_type: type,
-          post_number: post.post_number,
-          topic_title: post.topic.title,
-          topic_id: post.topic.id,
-          excerpt:
-            nil ||
-            post.excerpt(
-              400,
-              text_entities: true,
-              strip_links: true,
-              remap_emoji: true
-            ),
-          username: type == Notification.types[:liked] ? nil || opts[:display_username] : nil || post.username,
-          post_url: post.url,
-          is_pm: post.topic.private_message?
-        }
-        Jobs.enqueue(
-          :expo_push_notification,
-          payload:,
-          user_id: user.id
-        )
-      end
+  DiscourseEvent.on(:before_create_notification) do |user, type, post, opts|
+    next unless SiteSetting.lexicon_push_notifications_enabled
+    if user.expo_pn_subscriptions.exists?
+      payload = {
+        notification_type: type,
+        post_number: post.post_number,
+        topic_title: post.topic.title,
+        topic_id: post.topic.id,
+        excerpt:
+          nil ||
+          post.excerpt(
+            400,
+            text_entities: true,
+            strip_links: true,
+            remap_emoji: true
+          ),
+        username: type == Notification.types[:liked] ? nil || opts[:display_username] : nil || post.username,
+        post_url: post.url,
+        is_pm: post.topic.private_message?
+      }
+      Jobs.enqueue(
+        :expo_push_notification,
+        payload:,
+        user_id: user.id
+      )
     end
+  end
 
 
-    # handle push notification every time send chat message
-    DiscourseEvent.on(:chat_message_created) do |notification|
-      Rails.logger.warn "[Lexicon] run chat push notification"
-
-      DiscourseLexiconPlugin::ChatNotification.handle(notification)
-    end
+  # handle push notification every time send chat message
+  DiscourseEvent.on(:chat_message_created) do |notification|
+    next unless SiteSetting.lexicon_push_notifications_enabled
+    DiscourseLexiconPlugin::ChatNotification.handle(notification)
   end
 
   Discourse::Application.routes.append do

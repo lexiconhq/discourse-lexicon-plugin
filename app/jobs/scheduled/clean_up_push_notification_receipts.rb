@@ -6,6 +6,8 @@ module Jobs
     sidekiq_options retry: false
 
     def execute(_args)
+      return unless SiteSetting.lexicon_push_notifications_enabled
+
       # Delete push notification receipts older than 1 day
       PushNotificationReceipt.where('created_at < ?', 1.day.ago).delete_all
       # Requeue receipt that exist ( 20 minutes ago chosen as receipt should be processed after 15 minutes)

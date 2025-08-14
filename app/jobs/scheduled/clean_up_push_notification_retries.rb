@@ -6,6 +6,8 @@ module Jobs
     sidekiq_options retry: false
 
     def execute(_args)
+      return unless SiteSetting.lexicon_push_notifications_enabled
+
       # Delete all push notification retries that above RETRY_LIMIT
       PushNotificationRetry.where('retry_count >= ?', PushNotificationRetry.retry_limit).delete_all
       # Requeue all push notification retries whose retry_count is below `PushNotificationRetry.retry_limit` which are not yet queued or in progress
@@ -15,7 +17,7 @@ module Jobs
       retry_records_by_push_notification_id.each do |push_notification_id, retry_records|
         retry_tokens = []
         retry_records.each do |retry_record|
-          should_finish_retry_time = retry_record.updated_at
+          retry_record.updated_at
           next unless retry_record.retry_time < Time.current
 
           retry_tokens << retry_record.token
