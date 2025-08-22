@@ -55,9 +55,9 @@ after_initialize do
 
   User.class_eval { has_many :expo_pn_subscriptions, dependent: :delete_all }
 
-
   DiscourseEvent.on(:before_create_notification) do |user, type, post, opts|
     next unless SiteSetting.lexicon_push_notifications_enabled
+
     if user.expo_pn_subscriptions.exists?
       payload = {
         notification_type: type,
@@ -88,6 +88,7 @@ after_initialize do
   # handle push notification every time send chat message
   DiscourseEvent.on(:chat_message_created) do |notification|
     next unless SiteSetting.lexicon_push_notifications_enabled
+
     DiscourseLexiconPlugin::ChatNotification.handle(notification)
   end
 
