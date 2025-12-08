@@ -45,21 +45,20 @@ export default class DeeplinkRoute extends DiscourseRoute {
       // Internally, this uses `window.location = url` rather than `window.location.replace`.
 
       const hostname = window.location.hostname;
-      if (
-        this.siteSettings.lexicon_activate_account_link_enabled &&
-        link.startsWith("u/activate-account/")
-      ) {
-        const [, , emailToken] = link.split("/");
-
-        DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://${hostname}/activate-account/${emailToken}`
-        );
+      if (link.startsWith("u/activate-account/")) {
+        // NOTE: We are disabling activate-account deeplinks for now but keeping the code for future reference
+        // const [, , emailToken] = link.split("/");
+        // DiscourseURL.redirectTo(
+        //   `${this.siteSettings.lexicon_app_scheme}://${hostname}/activate-account/${emailToken}`
+        // );
+        return;
       } else if (
+        // NOTE: activate-account deeplinks will be disabled but the login deeplinks will still work
         this.siteSettings.lexicon_activate_account_link_enabled &&
         link.startsWith("login")
       ) {
         DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://${hostname}/login`
+          `${this.siteSettings.lexicon_app_scheme}://${hostname}/login`,
         );
       } else if (
         this.siteSettings.lexicon_invites_link_enabled &&
@@ -73,12 +72,12 @@ export default class DeeplinkRoute extends DiscourseRoute {
           : `invites/${inviteKey}`;
 
         DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://${hostname}/${deeplink}`
+          `${this.siteSettings.lexicon_app_scheme}://${hostname}/${deeplink}`,
         );
       } else {
         const scene = this.is_pm ? "message-detail" : "post-detail";
         DiscourseURL.redirectTo(
-          `${this.siteSettings.lexicon_app_scheme}://${hostname}/${scene}/${link}`
+          `${this.siteSettings.lexicon_app_scheme}://${hostname}/${scene}/${link}`,
         );
       }
     }
