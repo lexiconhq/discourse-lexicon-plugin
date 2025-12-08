@@ -45,18 +45,16 @@ export default class DeeplinkRoute extends DiscourseRoute {
       // Internally, this uses `window.location = url` rather than `window.location.replace`.
 
       const hostname = window.location.hostname;
-      if (link.startsWith("u/activate-account/")) {
-        // NOTE: We are disabling activate-account deeplinks for now but keeping the code for future reference
-        // const [, , emailToken] = link.split("/");
-        // DiscourseURL.redirectTo(
-        //   `${this.siteSettings.lexicon_app_scheme}://${hostname}/activate-account/${emailToken}`
-        // );
-        return;
-      } else if (
-        // NOTE: activate-account deeplinks will be disabled but the login deeplinks will still work
+      if (
         this.siteSettings.lexicon_activate_account_link_enabled &&
-        link.startsWith("login")
+        link.startsWith("u/activate-account/")
       ) {
+        const [, , emailToken] = link.split("/");
+
+        DiscourseURL.redirectTo(
+          `${this.siteSettings.lexicon_app_scheme}://${hostname}/activate-account/${emailToken}`,
+        );
+      } else if (link.startsWith("login")) {
         DiscourseURL.redirectTo(
           `${this.siteSettings.lexicon_app_scheme}://${hostname}/login`,
         );

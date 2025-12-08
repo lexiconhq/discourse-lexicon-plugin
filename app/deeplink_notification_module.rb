@@ -6,6 +6,7 @@ module DeeplinkNotification
 
     update_deep_link_url(opts) if deep_linking_enabled?(opts)
     update_activation_link(opts) if activation_link_enabled?(opts)
+    update_login_link(opts)
 
     super(*builder_args)
   end
@@ -20,6 +21,10 @@ module DeeplinkNotification
     case opts[:template]
     when 'user_notifications.signup'
       opts[:base_url] = "#{Discourse.base_url}/lexicon/deeplink"
+  end
+
+  def update_login_link(opts)
+    case opts[:template]
     when 'user_notifications.signup_after_approval'
       opts[:base_url] = "#{Discourse.base_url}/lexicon/deeplink/login"
     end
