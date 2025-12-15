@@ -21,6 +21,7 @@ module DeeplinkNotification
     case opts[:template]
     when 'user_notifications.signup'
       opts[:base_url] = "#{Discourse.base_url}/lexicon/deeplink"
+    end
   end
 
   def update_login_link(opts)
