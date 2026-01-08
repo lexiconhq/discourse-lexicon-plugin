@@ -16,6 +16,8 @@ class PushNotificationManager
                                                                 channel_name)
     title = content[:title]
     body = content[:body]
+    badge = 1 # temporary fixed badge count for iOS
+
 
     client = Expo::Push::Client.new
     experience_id_group = build_experience_id_groups(expo_pn_subscriptions)
@@ -37,6 +39,7 @@ class PushNotificationManager
                     .sound('default')
                     .title(title)
                     .body(body)
+                    .badge(badge)
                     .data(
                       {
                         'discourse_url' => post_url,
