@@ -10,9 +10,9 @@
 # Reference: https://meta.discourse.org/t/plugin-using-own-gem/50007/4
 # After testing, we determined that we do not need to load all the dependent packages already installed in the Discourse core. However, `ffi` is required because we encountered the error: `Error installing llhttp-ffi Gem::MissingSpecError: Could not find 'ffi' (>= 1.15.5)`.
 
-gem 'domain_name', '0.5.20190701'
-gem 'http-cookie', '1.0.5'
-gem 'ffi', '1.17.2'
+gem 'domain_name', '0.6.20240107'
+gem 'http-cookie', '1.0.8'
+gem 'ffi', '1.17.4'
 gem 'ffi-compiler', '1.3.2', require_name: 'ffi-compiler/loader'
 gem 'llhttp-ffi', '0.4.0', require_name: 'llhttp'
 gem 'http-form_data', '2.3.0', require_name: 'http/form_data'
