@@ -28,6 +28,11 @@ module DiscourseLexiconPlugin
           experience_id: experience_id,
           user_auth_token_id: current_user.user_auth_tokens&.last&.id
         )
+
+      # `find_or_create_by` returns an unsaved record when validation fails, which would
+      # otherwise be reported to the app as a successful subscription.
+      return render_json_error(record) unless record.persisted?
+
       # return the expo_pn_token and user_id
       # so that the client can utilize it if needed
       render json: {

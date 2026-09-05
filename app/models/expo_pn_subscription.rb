@@ -2,5 +2,7 @@
 
 class ExpoPnSubscription < ActiveRecord::Base
     belongs_to :user
-    belongs_to :user_auth_token
+    # The mobile app authenticates with a user-api-key, which creates no user auth token,
+    # so a subscription can exist without one.
+    belongs_to :user_auth_token, optional: true
 end
