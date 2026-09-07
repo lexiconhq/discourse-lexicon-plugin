@@ -15,6 +15,13 @@ module DiscourseLexiconPlugin
       sender = message.user
       chat_channel = message.chat_channel
 
+      membership =
+        Chat::UserChatChannelMembership.find_by(
+          user_id: notification.user_id,
+          chat_channel_id: channel_id
+        )
+      return if membership&.muted
+
       user_receive = ExpoPnSubscription.find_by(user_id: notification.user_id)
       return unless user_receive
 

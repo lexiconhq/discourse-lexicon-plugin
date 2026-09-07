@@ -37,6 +37,28 @@ RSpec.describe DiscourseLexiconPlugin::ChatMentionNotification do
         'channel_name' => chat_channel.name
       )
     end
+
+    it 'still enqueues a job when the channel membership is not muted' do
+      Fabricate(
+        :user_chat_channel_membership,
+        user: user,
+        chat_channel: chat_channel,
+        muted: false
+      )
+
+      expect { subject }.to change { Jobs::ExpoPushNotification.jobs.size }.by(1)
+    end
+
+    it 'does not enqueue a job when the recipient has muted the channel' do
+      Fabricate(
+        :user_chat_channel_membership,
+        user: user,
+        chat_channel: chat_channel,
+        muted: true
+      )
+
+      expect { subject }.not_to(change { Jobs::ExpoPushNotification.jobs.size })
+    end
   end
 
   context 'when the notification type is not chat_mention' do
