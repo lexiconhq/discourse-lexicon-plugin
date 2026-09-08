@@ -51,6 +51,7 @@ module DiscourseLexiconPlugin
         .joins(user: :user_option)
         .where(chat_channel_id: channel_id)
         .where.not(user_id: sender_id)
+        .where(muted: false)
         .where(user_option: { chat_enabled: true })
         .merge(User.not_suspended)
     end
